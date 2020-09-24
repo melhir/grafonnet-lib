@@ -9,6 +9,8 @@
    * @param datasource (optional) Panel datasource.
    * @param unit (optional) The unit of the data.
    * @param thresholds (optional) An array of threashold values.
+   * @param orientation (optional) string (horizontal or vertical)
+   * @param displayMode (optional) string (eg. lcd)
    *
    * @method addTarget(target) Adds a target object.
    * @method addTargets(targets) Adds an array of targets.
@@ -19,6 +21,8 @@
     datasource=null,
     unit=null,
     thresholds=[],
+    orientation=null,
+    displayMode=null,
   ):: {
     type: 'bargauge',
     title: title,
@@ -43,5 +47,17 @@
       targets+: [target { refId: std.char(std.codepoint('A') + nextTarget) }],
     },
     addTargets(targets):: std.foldl(function(p, t) p.addTarget(t), targets, self),
+    options: {
+      reduceOptions: {
+        values: false,
+        calcs: [
+          'mean',
+        ],
+        fields: '',
+      },
+      [if orientation != null then 'orientation']: orientation,
+      [if displayMode != null then 'displayMode']: displayMode,
+      showUnfilled: true,
+    },
   },
 }
